@@ -1,0 +1,498 @@
+:root {
+    --text-color: #ffffff;
+    --primary-color: #192942;
+    --darker-primary-color: color-mix(in oklab, var(--primary-color) 90%, #000000 10%);
+    --lighter-primary-color: color-mix(in oklab, var(--primary-color) 90%, #ffffff 10%);
+    --secondary-color: #3b0f44;
+    --darker-secondary-color: color-mix(in oklab, var(--secondary-color) 90%, #000000 10%);
+    --lighter-secondary-color: color-mix(in oklab, var(--secondary-color) 90%, #ffffff 10%);
+}
+
+::selection {
+    color: var(--text-color);
+    background-color: var(--darker-primary-color)
+}
+
+:focus-visible {
+    border-radius: 2px;
+    outline: #00000080 solid 2.5px;
+}
+
+::placeholder,
+::-moz-placeholder,
+::-webkit-input-placeholder,
+::-ms-placeholder {
+    color: var(--text-color);
+}
+
+html,
+body {
+    height: 100dvh;
+    overflow-x: hidden;
+}
+
+html {
+    background-color: var(--primary-color);
+}
+
+html {
+    background-image: url("../assets/images/backgrounds/akkariin.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    overscroll-behavior: none;
+    scroll-behavior: smooth;
+    scroll-padding-top: 75px;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    height: 100dvh;
+    color: var(--text-color);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+}
+
+body,
+input,
+button {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+input,
+button {
+    cursor: pointer;
+}
+
+kbd {
+    background-color: var(--lighter-primary-color);
+    outline: solid var(--lighter-primary-color) 3px;
+}
+
+.title-screen {
+    width: 100dvw;
+    height: 100dvh;
+    position: fixed;
+    background: repeating-linear-gradient(45deg, var(--darker-primary-color), var(--darker-primary-color) 5px, var(--primary-color) 5px, var(--primary-color) 25px);
+    background-color: var(--primary-color);
+    z-index: 10;
+}
+
+.logo {
+    width: 180px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    margin-block: 30px;
+}
+
+.title-screen-buttons {
+    min-width: 200px;
+    width: 25%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.title-screen-buttons button {
+    padding: 15px;
+    color: var(--text-color);
+    background-color: var(--darker-primary-color);
+    border: double var(--primary-color) 5px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-bottom-right-radius: 10px;
+    font-weight: 700;
+}
+
+.title-screen-buttons button:hover {
+    scale: 1.1;
+}
+
+.modal {
+    min-width: 250px;
+    width: 50%;
+    max-height: 75dvh;
+    padding: 25px;
+    color: var(--text-color);
+    background-color: var(--primary-color);
+    border: dashed var(--lighter-primary-color) 2px;
+    border-radius: 10px;
+    text-align: left;
+}
+
+.modal-subtitle:first-of-type {
+    margin-top: 0;
+}
+
+.setting {
+    display: flex;
+    justify-content: space-between;
+}
+
+.option {
+    width: 18px;
+    height: 18px;
+}
+
+.modal-title,
+.modal-subtitle {
+    margin: 0;
+    margin-left: 10px;
+    margin-bottom: 8px;
+    text-decoration: underline;
+    font-size: 1.5em;
+    font-weight: 700;
+}
+
+.modal-subtitle {
+    margin-top: 25px;
+    font-size: 1.2em;
+}
+
+.modal-text {
+    margin-block: 4px;
+}
+
+.modal-text a {
+    text-decoration: underline;
+}
+
+.close-button {
+    position: absolute;
+    color: var(--text-color);
+    background-color: transparent;
+    border: 0;
+    top: 15px;
+    right: 15px;
+}
+
+.high-score,
+.version {
+    position: absolute;
+    margin: 5px;
+    font-size: 0.8em;
+    bottom: 0;
+}
+
+.version {
+    right: 0;
+}
+
+input:disabled {
+    cursor: not-allowed;
+}
+
+.game-screen {
+    padding-top: 75px;
+}
+
+.loading-screen {
+    width: 100%;
+    height: 100dvh;
+    background-color: var(--primary-color);
+    position: absolute;
+    top: 0;
+    z-index: 5;
+}
+
+.loading-message,
+.loading-comment {
+    padding-top: 50px;
+    text-align: center;
+    font-size: 2em;
+    font-weight: 800;
+}
+
+.loading-comment {
+    font-size: 1em;
+    font-weight: normal;
+}
+
+.players {
+    position: absolute;
+    opacity: 0;
+}
+
+.liquid-glass {
+    padding: 25px;
+    background: #ffffff1a;
+    background-image: linear-gradient(135deg, #ffffff26, transparent 50%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid #ffffff33;
+    border-radius: 25px;
+    text-shadow: #000000 0 0 15px;
+    box-shadow: 0 10px 40px #1f268740, inset 0 1px 0 #ffffff80;
+}
+
+.overlay-information {
+    padding: 15px;
+    position: absolute;
+    border-radius: 0;
+    z-index: 10;
+}
+
+.rounds {
+    border-end-end-radius: 15px;
+    top: 0;
+}
+
+.points {
+    border-end-start-radius: 15px;
+    top: 0;
+    right: 0;
+}
+
+.timer {
+    border-start-end-radius: 15px;
+    bottom: 0;
+}
+
+.game {
+    margin-inline: 25px;
+}
+
+.controls,
+.user-answers,
+.user-answers div:last-of-type {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.controls {
+    margin-bottom: 20px;
+    font-size: 1.3em;
+}
+
+.play-button,
+.stop-button {
+    width: 70px;
+    height: 70px;
+    max-height: 85px;
+    padding: 10px;
+    text-shadow: none;
+    font-size: 1.3em;
+}
+
+.seek-bar-container {
+    width: 75%;
+    margin: 0 auto;
+}
+
+.seek-bar {
+    width: 100%;
+    margin: 0 auto;
+    display: block;
+    background: none;
+}
+
+.seek-bar::-webkit-slider-thumb,
+.seek-bar::-moz-range-thumb {
+    border-radius: 5px;
+    background-color: var(--primary-color);
+    padding: 2px;
+    border: none;
+}
+
+.seek-bar::-moz-range-seek {
+    padding: 2px;
+    background-color: var(--lighter-primary-color);
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+}
+
+.seek-bar::-moz-range-track {
+    padding: 1px;
+    background-color: var(--darker-primary-color);
+    border-radius: 25px;
+}
+
+.seek-bar::-ms-fill-lower {
+    padding: 2px;
+    background-color: var(--lighter-primary-color);
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+}
+
+.seek-bar::-ms-fill-upper {
+    padding: 1px;
+    background-color: var(--darker-primary-color);
+    border-radius: 25px;
+}
+
+.timecode {
+    text-align: center;
+    font-size: 1.3em;
+}
+
+.user-answers div:last-of-type {
+    height: min-content;
+}
+
+.user-answers div input,
+.user-answers div button {
+    color: var(--text-color);
+    padding: 10px;
+    border: none;
+    border-radius: 15px;
+}
+
+.user-answers div ul {
+    width: 150px;
+    padding: 0;
+    margin-top: 10px;
+    font-size: 0.9em;
+    list-style: none;
+}
+
+.user-answers div ul li {
+    margin: 5px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.answer {
+    margin-top: -30px;
+    margin-inline: 20px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.answer-thumbnail {
+    width: auto;
+    height: 35dvh;
+    display: block;
+    margin: 0 auto;
+    margin-block: 15px;
+    border-radius: 15px;
+}
+
+.answer-sources-songs {
+    margin-bottom: 15px;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    gap: 30px;
+    text-align: left;
+}
+
+.answer-sources,
+.answer-songs {
+    padding-block: 5px;
+    padding-inline: 25px;
+    background-color: var(--lighter-primary-color);
+    border-radius: 15px;
+}
+
+.next-button {
+    padding-block: 20px;
+    position: absolute;
+    color: var(--text-color);
+    bottom: 25px;
+}
+
+.answer-title,
+.answer-creators,
+.answer-column-title {
+    font-weight: 600;
+}
+
+.answer-column-title {
+    margin: -5px;
+    margin-top: 5px;
+    text-align: center;
+    text-decoration: underline;
+}
+
+.final-score {
+    text-align: center;
+    font-size: 2em;
+}
+
+.user-score,
+.total-score {
+    font-weight: 800;
+}
+
+.hide {
+    display: none;
+    z-index: -5;
+}
+
+.end-screen-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.replay-button,
+.title-screen-button {
+    margin-top: 15px;
+    color: var(--text-color);
+}
+
+@media screen and (max-width: 770px) {
+
+    .user-answers,
+    .user-answers div:last-of-type {
+        gap: 5px;
+    }
+
+    .user-answers div:not(.user-answers div:last-of-type)>* {
+        width: 20dvw;
+    }
+
+    .user-answers div:last-of-type {
+        flex-direction: column;
+    }
+}
+
+@media screen and (max-width: 525px) {
+    .game,
+    .seek-bar-container {
+        padding: 15px;
+    }
+
+    .timecode {
+        margin-block: 15px;
+    }
+
+    .user-answers {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .user-answers div:not(.user-answers div:last-of-type)>* {
+        width: max-content;
+        margin: 0;
+    }
+
+    .user-answers div input {
+        height: 8px;
+    }
+
+    .user-answers div button {
+        padding: 0;
+        padding-inline: 8px;
+        height: 25px;
+    }
+
+    .user-answers div ul {
+        display: none;
+    }
+}
