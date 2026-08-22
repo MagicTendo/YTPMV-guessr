@@ -1,85 +1,35 @@
-const safeOption = document.getElementsByClassName("safe-option")[0];
-const options = ["safe", "classic", "collab", "multisource", "sources-only", "songs-only", "max-rounds", "timer"];
-const defaultValues = { "safe": true, "mode": "classic", "max-rounds": 5, "timer": 0 };
-var workAmounts;
+const totalYTPMV = document.getElementsByClassName("total-ytpmv")[0];
+const safeOption = document.getElementsByClassName("safe-mode")[0];
+const clearCookiesButton = document.getElementsByClassName("clear-cookies-button")[0];
+const defaultValues = {};
+
+let workAmounts;
+
+function clearSettings() {
+    Object.values(document.querySelectorAll(".option, .input")).forEach(option => {
+        const defaultValue = option.dataset.default;
+
+        if (option.type === "number")
+            option.value = defaultValue;
+        else
+            option.checked = defaultValue === "true";
+    });
+
+    clearAllCookies();
+}
 
 function initialiseModals() {
-    const modalNames = ["settings", "how-to-play", "credits"];
+    Object.values(document.getElementsByClassName("title-screen-buttons")[0].children).slice(1).forEach(button => {
+        const modalName = button.className.replace("-button", "");
+        const modal = document.getElementsByClassName(`${modalName}-modal`)[0];
 
-    for (let i = 0; i < modalNames.length; i++) {
-        const modal = document.getElementsByClassName(`${modalNames[i]}-modal`)[0];
-
-        document.getElementsByClassName(`${modalNames[i]}-button`)[0].addEventListener("click", () => {
-            modal.showModal();
-        });
-
-        document.getElementsByClassName(`${modalNames[i]}-close-button`)[0].addEventListener("click", () => {
-            modal.close();
-        });
-    }
-}
-
-function getUserSettings() {
-    const settings = ["safe", "mode", "max-rounds", "timer"];
-    const userSettings = {};
-
-    settings.forEach(setting => {
-        userSettings[setting] = getCookie(setting) ?? defaultValues[setting];
+        document.getElementsByClassName(`${modalName}-button`)[0].addEventListener("click", () => { modal.showModal(); });
+        document.getElementsByClassName(`${modalName}-close-button`)[0].addEventListener("click", () => { modal.close(); });
     });
-
-    return userSettings;
 }
 
-function updateAmounts() {
-    for (let i = 1; i < options.length - 2; i++) {
-        safeOption.checked ? document.getElementsByClassName(`${options[i]}-amount`)[0].innerText = workAmounts[`${options[i]}-safe`] : document.getElementsByClassName(`${options[i]}-amount`)[0].innerText = workAmounts[`${options[i]}-unsafe`];
-    }
+function getUserSetting(settingName) {
+    const rawSetting = getCookie(settingName) ?? defaultValues[settingName];
+
+    return isNaN(rawSetting) ? rawSetting === "true" : Number(rawSetting);
 }
-
-window.addEventListener("load", async () => {
-    const selectedMode = getCookie("mode") ?? "classic";
-
-    await fetch("./data/amounts.json")
-        .then(response => response.json())
-        .then(async amounts => {
-            workAmounts = amounts;
-        });
-
-    options.forEach(option => {
-        const currentOption = document.getElementsByClassName(`${option}-option`)[0];
-
-        if (currentOption.type === "checkbox") {
-            currentOption.addEventListener("change", async () => {
-                createCookie(option, currentOption.checked);
-                updateAmounts();
-            });
-        } else if (currentOption.type === "radio") {
-            currentOption.addEventListener("change", async () => {
-                createCookie("mode", option);
-            });
-        } else {
-            currentOption.addEventListener("change", async () => {
-                if (currentOption.checkValidity())
-                    createCookie(option, currentOption.value);
-                else
-                    currentOption.value = defaultValues[option];
-            });
-        }
-
-        if (currentOption.type === "checkbox") {
-            currentOption.checked = getCookie(option) === "false" ? false : true;
-        } else if (currentOption.type !== "radio") {
-            if (!currentOption.checkValidity())
-                currentOption.value = defaultValues[option];
-
-            currentOption.value = getCookie(option) ?? defaultValues[option];
-        }
-
-        if (selectedMode === option)
-            currentOption.checked = true;
-    });
-
-    initialiseModals();
-    updateHighScore();
-    updateAmounts();
-}); 

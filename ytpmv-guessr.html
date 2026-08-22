@@ -21,8 +21,7 @@
     <title>YTPMV guessr</title>
 
     <meta name="title" content="YTPMV guessr">
-    <meta name="description"
-        content="Try to guess the sources, the songs and even the creators of random YTPMVs only by ear !">
+    <meta name="description" content="Try to guess the sources and the songs of random YTPMV and 音MAD only by ear!">
     <meta name="keywords" content="ytpmv, otomad, guessr, game">
     <meta name="author" content="BakaTaida">
     <meta name="language" content="FR">
@@ -30,11 +29,10 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="YTPMV guessr">
     <meta property="og:title" content="YTPMV guessr">
-    <meta property="og:description"
-        content="Try to guess the sources, the songs and even the creators of random YTPMVs only by ear !">
-    <meta property="og:url" content="https://ytpmv.rf.gd">
-    <meta property="og:image" content="https://ytpmv.rf.gd/assets/images/ytpmv-guessr-logo.png">
-    <meta property="og:image:secure_url" content="https://ytpmv.rf.gd/assets/images/ytpmv-guessr-logo.png">
+    <meta property="og:description" content="Try to guess the sources and the songs of random YTPMV and 音MAD only by ear!">
+    <meta property="og:url" content="https://ytpmv.rf.gd/ytpmv-guessr">
+    <meta property="og:image" content="https://ytpmv.rf.gd/assets/images/logos/ytpmv-guessr.png">
+    <meta property="og:image:secure_url" content="https://ytpmv.rf.gd/assets/images/logos/ytpmv-guessr.png">
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="1000">
     <meta property="og:image:height" content="600">
@@ -43,275 +41,298 @@
     <meta name="twitter:card" content="summary">
     <meta name="twitter:site" content="@BakaTaida">
     <meta name="twitter:title" content="YTPMV guessr">
-    <meta name="twitter:description"
-        content="Try to guess the sources, the songs and even the creators of random YTPMVs only by ear !">
-    <meta property="twitter:url" content="https://ytpmv.rf.gd">
-    <meta name="twitter:image" content="https://ytpmv.rf.gd/assets/images/ytpmv-guessr-logo.png">
+    <meta name="twitter:description" content="Try to guess the sources and the songs of random YTPMV and 音MAD only by ear!">
+    <meta property="twitter:url" content="https://ytpmv.rf.gd/ytpmv-guessr">
+    <meta name="twitter:image" content="https://ytpmv.rf.gd/assets/images/logos/ytpmv-guessr.png">
 </head>
 
 <body>
     <main class="title-screen">
-        <img width="1000" height="600" class="logo" src="./assets/images/ytpmv-guessr-logo.png"
-            alt="Logo of YTPMV Guessr" draggable="false">
+        <img width="1000" height="600" class="logo" src="./assets/images/logos/ytpmv-guessr.png" alt="Logo of YTPMV guessr" draggable="false">
 
         <div class="title-screen-buttons">
             <button class="start-button" type="button" draggable="false">START</button>
             <button class="settings-button" type="button" draggable="false">SETTINGS</button>
             <button class="how-to-play-button" type="button" draggable="false">HOW TO PLAY</button>
+            <button class="changelogs-button" type="button" draggable="false">CHANGELOGS</button>
             <button class="credits-button" type="button" draggable="false">CREDITS</button>
         </div>
 
         <dialog class="settings-modal modal">
             <form method="dialog">
-                <button class="settings-close-button close-button" type="button" aria-label="Close modal"
-                    draggable="false">❌</button>
+                <button class="close-button settings-close-button" type="button" aria-label="Close modal" draggable="false">❌</button>
 
                 <h2 class="modal-title">Settings</h2>
 
-                <div class="setting"
-                    title="When activated, only SFW for YTPMVs will be picked. In this case, nudity and other sensitive content can be choosed !">
-                    <label for="safe-mode">🚫 Safe mode</label>
-                    <input class="safe-option option" id="safe-mode" type="checkbox" checked autofocus>
-                </div>
+                <p class="modal-text">Hover a setting to get more information about it. Cookies are used solely to save
+                    the modified settings and the highest score.</p>
 
-                <div class="setting" title="When activated, any YTPMVs can be picked !">
-                    <label for="classic-mode">🍙 Classic mode (<span class="classic-amount"></span>)</label>
-                    <input class="classic-option option" id="classic-mode" type="radio" name="game-settings">
-                </div>
+                <fieldset class="settings-group">
+                    <legend class="settings-group-title">Preferences</legend>
 
-                <div class="setting"
-                    title="When activated, only collaborations or collaboration parts will be choosen !">
-                    <label for="collab-mode">🤝 Collab mode (<span class="collab-amount"></span>)</label>
-                    <input class="collab-option option" id="collab-mode" type="radio" name="game-settings">
-                </div>
+                    <div class="setting" title="When activated, only SFW works can be picked. In this case, sensitive content should not be chosen!">
+                        <label for="safe-mode">🚫 Safe mode</label>
+                        <input class="safe-mode option" id="safe-mode" type="checkbox" data-default="true" checked autofocus>
+                    </div>
 
-                <div class="setting"
-                    title="When activated, only YTPMVs marked as using multiple sources will be choosen !">
-                    <label for="multisource-mode">🎨 Multisource mode (<span class="multisource-amount"></span>)</label>
-                    <input class="multisource-option option" id="multisource-mode" type="radio" name="game-settings">
-                </div>
+                    <div class="setting" title="When activated, you will be able to see the name of the work!">
+                        <label for="show-name">🏷️ Show work name</label>
+                        <input class="show-name option" id="show-name" type="checkbox" data-default="false" autofocus>
+                    </div>
 
-                <div class="setting" title="When activated, only the sources has to be guessed !">
-                    <label for="sources-only-mode">🛑 Sources only mode (<span
-                            class="sources-only-amount"></span>)</label>
-                    <input class="sources-only-option option" id="sources-only-mode" type="radio" name="game-settings">
-                </div>
+                    <div class="setting" title="When activated, you will be able to see the creator(s)!">
+                        <label for="show-creators">🎨 Show creator(s)</label>
+                        <input class="show-creators option" is="show-creators" type="checkbox" data-default="false" autofocus>
+                    </div>
 
-                <div class="setting" title="When activated, only the songs has to be guessed !">
-                    <label for="songs-only-mode">🎶 Songs only mode (<span class="songs-only-amount"></span>)</label>
-                    <input class="songs-only-option option" id="songs-only-mode" type="radio" name="game-settings">
-                </div>
+                    <div class="setting" title="When activated, you will be able to see on which plateform the work was first uploaded!">
+                        <label for="show-plateform">📻 Show platform</label>
+                        <input class="show-plateform option" id="show-plateform" type="checkbox" data-default="false" autofocus>
+                    </div>
+                </fieldset>
 
-                <div class="setting" title="Choose how many rounds you want to play !">
-                    <label for="max-rounds-amount">✨ Rounds</label>
-                    <input class="max-rounds-option" id="max-rounds-amount" type="number" min="3" max="25" value="5">
-                </div>
+                <fieldset class="settings-group">
+                    <legend class="settings-group-title">Difficulty</legend>
 
-                <div class="setting" title="Choose how long each round should last !">
-                    <label for="timer-amount">⏱️ Timer (in seconds)</label>
-                    <input class="timer-option" id="timer-amount" type="number" min="0" max="600" step="30"
-                        value="0">
-                </div>
+                    <div class="setting" title="When activated, the game will automatically end if you make a wrong guess!">
+                        <label for="death-match">☠️ Death match</label>
+                        <input class="death-match option" id="death-match" type="checkbox" data-default="false" autofocus>
+                    </div>
+
+                    <div class="setting" title="Only common sources and songs can be chosen!">
+                        <label for="easy">⭐ Easy</label>
+                        <input class="easy option" id="easy" type="radio" name="game-difficulty" data-default="true" checked>
+                    </div>
+
+                    <div class="setting" title="Only common and uncommon sources and songs can be chosen!">
+                        <label for="medium">🔎 Medium</label>
+                        <input class="medium option" id="medium" type="radio" name="game-difficulty" data-default="false">
+                    </div>
+
+                    <div class="setting" title="Can be anything!">
+                        <label for="hard">🔥 Hard</label>
+                        <input class="hard option" id="hard" type="radio" name="game-difficulty" data-default="false">
+                    </div>
+                </fieldset>
+
+                <fieldset class="settings-group">
+                    <legend class="settings-group-title">Additional settings</legend>
+
+                    <div class="setting" title="Choose how many rounds you want to play!">
+                        <label for="max-rounds">✨ Rounds</label>
+                        <input class="max-rounds input" id="max-rounds" type="number" min="3" max="25" value="5" data-default="5">
+                    </div>
+
+                    <div class="setting" title="Choose how long (in seconds) each round should last after pressing play!">
+                        <label for="timer-amount">⏱️ Timer</label>
+                        <input class="timer-amount input" id="timer-amount" type="number" min="0" max="600" step="30" value="0" data-default="0">
+                    </div>
+                </fieldset>
+
+                <button class="clear-cookies-button" type="button" aria-label="Clear all cookies" draggable="false">Clear all cookies</button>
             </form>
         </dialog>
 
         <dialog class="how-to-play-modal modal">
             <form method="dialog">
-                <button class="how-to-play-close-button close-button" type="button" aria-label="Close modal"
-                    draggable="false">❌</button>
+                <button class="close-button how-to-play-close-button" type="button" aria-label="Close modal" draggable="false">❌</button>
 
                 <h2 class="modal-title">How to play</h2>
-                <h3 class="modal-subtitle">What's a <abbr title="YouTube Poop Music Video">YTPMV</abbr> / 音MAD ?</h3>
-                <p class="modal-text">It's a kind of "remix style" in which a song is remade with sounds from a or
-                    various videos.</p>
-                <p class="modal-text">The videos used are called sources, and can came from popular videos, memes,
-                    private jokes, songs, advertissements or much more. Usually, a source is composed of various videos
-                    as long it has the same character, but in this game you have to be precise. For example with the
-                    source "Jack Black defines Octagon", sometimes you'll need to be more precise : "Ask Jack Black",
-                    "Backstage with Elmo: Jack Black", "Elmo", "Jack Black", "Jack Black and Elmo - Disguise", "Ty
-                    Burrell", "Ty Burrell:Hexagon", etc.</p>
-                <p class="modal-text">For the song, it's usually a popular song on the Internet, but it can be
-                    anything (even an original composition). There's only one special case, collabs. Not all of them,
-                    but mostly, uses a medley composed of multiple songs, and it's the name of the medley that needs to
-                    be found and not each individual songs.</p>
-                <p class="modal-text">Last note about the creators, it's the hardest part to guess, but sometimes, with
-                    the style or the selection of sources, it's possible to find out who made it, so that's why I kept
-                    it in the game.</p>
 
                 <h3 class="modal-subtitle">Interface</h3>
-                <p class="modal-text">The interface is very simple. It's a player with a play or pause button, a stop
-                    button, and a seek bar which is usable only after the play button has been pressed once. Bellow this
-                    player, there are three inputs, respectfully for creators, sources and songs, in which you can put
-                    one guess per input at a time. You can submit your answers with the submit button, and if you are
-                    stuck and want to move on, you have the reveal answer button which will end the round.</p>
-                <p class="modal-text">On the top left-hand corner is shown the current round number, on the top
-                    right-hand corner is displayed your current score and finally, if enabled, is indicated on the
+
+                <p class="modal-text">For simplicity, the term "work" is used to talk about <abbr title="YouTube Poop Music Video">YTPMV</abbr> and <abbr title="otoMAD">音MAD</abbr>
+                    at the same time.</p>
+                <p class="modal-text">The interface is very simple. It's composed of a player, with a play (▶️), pause (⏸️), stop (⏹️),
+                    forward (⏩) and backward (⏪) button, as well as a seek bar which can only be used when the work has been
+                    played at least once. Below this player are two inputs, respectfully for source and song guesses. You can
+                    put one guess per input at a time. You can submit your answers with the "Submit" button, and if you
+                    are stuck and want to move on, you have the "Reveal" button which will end the round and show the answers.</p>
+                <p class="modal-text">On the top left-hand corner is shown the current round number. On the top
+                    right-hand corner is displayed your current score. And, finally, if enabled, is indicated on the
                     bottom left-hand corner the time left before the end of the round.</p>
-                <p class="modal-text">All answers are in lowercases, and the most popular one in English. However, somes
-                    are in their original languages (mostly Japanese, Chinese or Korean), this may be why you can't find
-                    what you're looking for sometimes.</p>
+                <p class="modal-text">All answers are in lowercases, and the most popular one are written in English. However, some
+                    are still in their original languages (mostly Japanese, Chinese, or Korean). This may explain why you can't
+                    find what you're looking for sometimes.</p>
 
                 <h3 class="modal-subtitle">Points system</h3>
-                <p class="modal-text">A correct creator give 300 points, and a correct source or song give 100 points.
-                    Only for sources and songs, if you make multiple correct guesses in a row, you have a multiplier
-                    based on your streak. In that case, if you make a eighth correct guess in a row, it'll be worth
-                    800 points instead of 100.</p>
+
+                <p class="modal-text">A correct guess gives 100 points. If you make multiple correct guesses in a row, you have a multiplier
+                    based on your streak. For example, eight correct guesses in a row would be worth 800 points.</p>
 
                 <h3 class="modal-subtitle">Shortcuts</h3>
-                <p class="modal-text">This only applies for users on desktop or computer. You can hover on a key symbol
+
+                <p class="modal-text">This only applies for desktop or computer users. You can hover on a key symbol
                     to get his name.</p>
-                <p class="modal-text"><kbd title="spacebar">Space</kbd> / <kbd title="k">k</kbd> : plays the YTPMV</p>
-                <p class="modal-text"><kbd title="backspace">⌫</kbd> / <kbd title="0">0</kbd> : stops the YTPMV</p>
-                <p class="modal-text"><kbd title="left arrow">←</kbd> / <kbd title="l">l</kbd> : backwards 5 seconds</p>
-                <p class="modal-text"><kbd title="right arrow">→</kbd> / <kbd title="j">j</kbd> : forwards 5 seconds</p>
-                <p class="modal-text"><kbd title="shift">⇧</kbd> : focuses the creator input</p>
-                <p class="modal-text"><kbd title="tab">⇥</kbd> : focuses the next input</p>
-                <p class="modal-text"><kbd title="shift">⇧</kbd> + <kbd title="tab">⇥</kbd> : focuses the previous input
-                </p>
-                <p class="modal-text"><kbd title="enter">↵</kbd> : submit the guesses</p>
+
+                <ul>
+                    <li class="modal-text"><kbd title="spacebar">Space</kbd> or <kbd title="k">k</kbd> to play the work.</li>
+                    <li class="modal-text"><kbd title="backspace">⌫</kbd> or <kbd title="0">0</kbd> to stop the work.</li>
+                    <li class="modal-text"><kbd title="left arrow">←</kbd> or <kbd title="j">j</kbd> to backward 5
+                        seconds.</li>
+                    <li class="modal-text"><kbd title="right arrow">→</kbd> or <kbd title="l">l</kbd> to forward 5
+                        seconds.</li>
+                    <li class="modal-text"><kbd title="shift">⇧</kbd> to focus the creator input.</li>
+                    <li class="modal-text"><kbd title="tab">↹</kbd> to focus the next input.</li>
+                    <li class="modal-text"><kbd title="shift">⇧</kbd> + <kbd title="tab">↹</kbd> to focus the previous
+                        input.</li>
+                    <li class="modal-text"><kbd title="enter">↵</kbd> to submit the guess(es).</li>
+                </ul>
+            </form>
+        </dialog>
+
+        <dialog class="changelogs-modal modal">
+            <form method="dialog">
+                <button class="close-button changelogs-close-button" type="button" aria-label="Close modal" draggable="false">❌</button>
+
+                <h2 class="modal-title">Changelogs</h2>
+
+                <h3 class="modal-subtitle">v2.0.0</h3>
+
+                <ul>
+                    <li class="modal-text">New works have been added to the database!</li>
+                    <li class="modal-text">The player got restyled and now looks nicer and cleaner.</li>
+                    <li class="modal-text">UI elements, like checkboxes, radio buttons, inputs, and the seek bar were remade
+                        to better match the global style.</li>
+                    <li class="modal-text">New settings are available and are now organised by categories.</li>
+                    <li class="modal-text">Difficulties are now available to prevent the game from being too hard! A difficulty score is calculated on each work, based on the
+                        frequency of his sources and songs, which help to filter the niche media.</li>
+                    <li class="modal-text">A death match mode has also been added, which ends the game as soon as you make one wrong guess.</li>
+                    <li class="modal-text">This changelogs modal has been added.</li>
+                    <li class="modal-text">And finally, random optimisations and refactors in the code were made.</li>
+                </ul>
             </form>
         </dialog>
 
         <dialog class="credits-modal modal">
             <form method="dialog">
-                <button class="credits-close-button close-button" type="button" aria-label="Close modal"
-                    draggable="false">❌</button>
+                <button class="close-button credits-close-button" type="button" aria-label="Close modal" draggable="false">❌</button>
 
                 <h2 class="modal-title">Credits</h2>
-                <p class="modal-text">This project was possible thanks to <a href="https://otodb.net/" target="_blank"
-                        draggable="false">otodb</a> ! Only the necessary data is collected (ids,
-                    creators, sources, songs, names and thumbnails) and is stored locally for better performances.</p>
-                <p class="modal-text">The APIs of <a href="https://developers.google.com/youtube/iframe_api_reference"
-                        target="_blank" draggable="false">YouTube</a>, of Nico Nico Douga and of <a
-                        href="https://developers.soundcloud.com/docs/api/html5-widget" target="_blank"
-                        draggable="false">Soundcloud</a> are used in order to play the YTPMV.</p>
-                <p class="modal-text">The logo is composed of the <a href="https://www.lomando.com/englishtop.html"
-                        target="_blank" draggable="false">Fancy Island</a> logo (Y), the "STOP" from the stop
-                    sign in "<a href="https://www.youtube.com/watch?v=_7jpz_55EdM" target="_blank"
-                        draggable="false">Sesame Street: Jack Black defines Octagon</a>" with the background (T), the
-                    Epic Rap Battle of History logo (P), the title "Tomato One" from <a
-                        href="https://www.youtube.com/watch?v=t2b_HB6TkVI" target="_blank" draggable="false">Michael
-                        Rosen's poems</a> (M) and of the pool strip test from sullyrox's video "<a
-                        href="https://www.youtube.com/watch?v=QI7RukDrEok" target="_blank" draggable="false">is the pool
-                        clean?</a>" (V).</p>
-                <p class="modal-text">The code is open source on <a href="https://github.com/MagicTendo/ytpmv-guessr"
-                        target="_blank" draggable="false">Github</a> !</p>
+
+                <p class="modal-text">This project was possible thanks to <a href="https://otodb.net/" target="_blank" draggable="false">otodb</a> (not affiliated)! Each entry was
+                    scraped in order to collect only the information the game needs (work ID, creator(s), source(s), song(s), name, links and thumbnail). Everything is stored
+                    locally for better performances, and to avoid request spam. There are currently 18,878 registered works!</p>
+                <p class="modal-text">The iframe APIs of <a href="https://developers.google.com/youtube/iframe_api_reference" target="_blank" draggable="false">YouTube</a>, <a
+                        href="https://gist.github.com/wkurosawa/903630fbcd01b300672053564c3a2916" target="_blank" draggable="false">Niconico</a> and <a
+                        href="https://developers.soundcloud.com/docs/api/html5-widget" target="_blank" draggable="false">SoundCloud</a> are used to play the YTPMV correctly. There
+                    is currently not support for Bilibili, Twitter and AcFun because they don't have any kind of API.</p>
+                <p class="modal-text">And finally, the code is open source on <a href="https://github.com/MagicTendo/ytpmv-guessr" target="_blank" draggable="false">GitHub</a>!</p>
             </form>
         </dialog>
 
-        <small class="high-score">High score : <span class="user-high-score">0</span></small>
-        <small class="version">v1.0.0</small>
+        <small class="high-score">High score: <span class="user-high-score">0</span></small>
+        <small class="version">v2.0.0</small>
     </main>
 
-    <section class="loading-screen">
-        <h2 class="loading-message">Loading<span class="loading-ellipsis"></span></h2>
-        <h3 class="loading-comment">. . .</h3>
-    </section>
-
     <section class="game-screen hide">
-        <aside class="liquid-glass overlay-information rounds">Round : <span class="round">1</span></aside>
-        <aside class="liquid-glass overlay-information points">Points : <span class="score">0</span></aside>
-        <aside class="liquid-glass overlay-information timer hide">Timer : <span class="timer">0</span></aside>
+        <aside class="overlay-information rounds">Round: <span class="round">1</span></aside>
+        <aside class="overlay-information points">Points: <span class="score">0</span></aside>
+        <aside class="overlay-information timer hide">Timer: <span class="timer">0</span></aside>
 
-        <div class="liquid-glass game">
+        <section class="loading-screen hide">
+            <h2 class="loading-message">Loading<span class="loading-ellipsis"></span></h2>
+            <h3 class="loading-comment">. . .</h3>
+        </section>
+
+        <section class="game hide">
             <div class="players">
-                <iframe id="youtube-player" width="0" height="0" src="" frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; web-share"
+                <iframe id="youtube-player" width="0" height="0" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; web-share"
                     referrerpolicy="strict-origin-when-cross-origin"></iframe>
-                <iframe id="nicovideo-player" width="0" height="0" src="" allowfullscreen="true" frameborder="0"
-                    allow="autoplay"></iframe>
-                <iframe id="soundcloud-player" width="100" height="20" src="" scrolling="no" frameborder="no"
-                    allow="autoplay"></iframe>
+                <iframe id="nicovideo-player" width="0" height="0" src="" allowfullscreen="true" frameborder="0" allow="autoplay"></iframe>
+                <iframe id="soundcloud-player" width="100" height="20" src="" scrolling="no" frameborder="no" allow="autoplay"></iframe>
             </div>
 
-            <div class="controls">
-                <button class="liquid-glass play-button" type="button" name="Play" aria-label="Play and pause button"
-                    draggable="false">▶️</button>
-                <button class="liquid-glass stop-button" type="button" name="Stop" aria-label="Stop button"
-                    draggable="false">⏹️</button>
-            </div>
+            <section class="player">
+                <h1 class="ytpmv-name">? ? ?</h1>
+                <h2 class="ytpmv-creators">By ? ? ?</h2>
+                <h3 class="ytpmv-plateform">On ? ? ?</h3>
 
-            <div class="liquid-glass seek-bar-container">
-                <input class="seek-bar" type="range" min="0" max="100" value="0" aria-label="Seek bar" draggable="false"
-                    disabled>
-            </div>
+                <div class="seek-bar-container">
+                    <progress class="seek-bar" value="0" max="100" aria-label="Seek bar" draggable="false"></progress>
 
-            <p class="timecode"><span class="current-time">00:00</span> / <span class="total-duration">00:00</span></p>
+                    <span class="timecodes"><span class="current-time">00:00</span> / <span class="total-duration">00:00</span></span>
+                </div>
+
+                <div class="controls">
+                    <button class="backward-button" type="button" name="Stop" aria-label="Backward button" draggable="false">⏪</button>
+                    <button class="play-button" type="button" name="Play" aria-label="Play and pause button" draggable="false">▶️</button>
+                    <button class="stop-button" type="button" name="Stop" aria-label="Stop button" draggable="false">⏹️</button>
+                    <button class="forward-button" type="button" name="Stop" aria-label="Forward button" draggable="false">⏩</button>
+                </div>
+            </section>
 
             <form class="user-answers" method="get">
                 <div>
-                    <input class="liquid-glass creators-input" name="creators" list="creators" placeholder="Creator(s)"
-                        draggable="false">
+                    <input class="container creators-input hide" type="text" name="creators" list="creators" placeholder="Creator(s)" draggable="false">
                     <datalist id="creators"></datalist>
 
                     <ul class="found-creators"></ul>
                 </div>
 
                 <div>
-                    <input class="liquid-glass sources-input" name="sources" list="sources" placeholder="Source(s)"
-                        draggable="false">
+                    <input class="container sources-input" type="text" name="sources" list="sources" placeholder="Source(s)" draggable="false">
                     <datalist id="sources"></datalist>
 
                     <ul class="found-sources"></ul>
                 </div>
 
                 <div>
-                    <input class="liquid-glass songs-input" name="songs" list="songs" placeholder="Song(s)"
-                        draggable="false">
+                    <input class="container songs-input" type="text" name="songs" list="songs" placeholder="Song(s)" draggable="false">
                     <datalist id="songs"></datalist>
 
                     <ul class="found-songs"></ul>
                 </div>
 
                 <div>
-                    <button type="submit" class="liquid-glass submit-button" draggable="false">Submit</button>
-                    <button class="liquid-glass reveal-button" draggable="false">Reveal</button>
+                    <button class="container submit-button" type="submit" onclick="event.preventDefault();" draggable="false">Submit</button>
+                    <button class="container reveal-button" onclick="event.preventDefault();" draggable="false">Reveal</button>
                 </div>
             </form>
-        </div>
-    </section>
-
-    <section class="answer hide">
-        <h2><cite class="answer-title"></cite> by <span class="answer-creators"></span></h2>
-
-        <a class="answer-link" href="https://otodb.net/" target="_blank" draggable="false">
-            <img width="854" height="480" class="answer-thumbnail" src="./assets/images/unsafe-warning.png"
-                alt="Thumbnail of the YTPMV" draggable="false">
-        </a>
-
-        <section class="answer-sources-songs">
-            <div>
-                <p class="answer-column-title">Sources</p>
-                <ul class="answer-sources"></ul>
-            </div>
-
-            <div>
-                <p class="answer-column-title">Songs</p>
-                <ul class="answer-songs"></ul>
-            </div>
         </section>
 
-        <button class="liquid-glass next-button" draggable="false">Next</button>
+        <section class="answer hide">
+            <h2><cite class="answer-title"></cite> by <span class="answer-creators"></span></h2>
+
+            <a class="answer-link" href="https://otodb.net/" target="_blank" draggable="false">
+                <img width="854" height="480" class="answer-thumbnail" src="./assets/images/unsafe-warning.png" alt="Thumbnail of the YTPMV" loading="eager" draggable="false">
+            </a>
+
+            <section class="answer-sources-songs">
+                <div>
+                    <p class="answer-column-title">Sources</p>
+                    <ul class="answer-sources"></ul>
+                </div>
+
+                <div>
+                    <p class="answer-column-title">Songs</p>
+                    <ul class="answer-songs"></ul>
+                </div>
+            </section>
+
+            <button class="container next-button" draggable="false">Next</button>
+        </section>
+
+        <section class="end-screen hide">
+            <h2 class="final-score"><span class="user-score"></span> / <span class="total-score"></span></h2>
+
+            <div class="end-screen-buttons">
+                <button class="container replay-button" draggable="false">Replay</button>
+                <button class="container title-screen-button" draggable="false">Return to title screen</button>
+            </div>
+        </section>
     </section>
 
-    <section class="end-screen hide">
-        <h2 class="final-score"><span class="user-score"></span> / <span class="total-score"></span></h2>
-
-        <div class="end-screen-buttons">
-            <button class="liquid-glass replay-button" draggable="false">Replay</button>
-            <button class="liquid-glass title-screen-button" draggable="false">Return to title screen</button>
-        </div>
-    </section>
-
-    <script src="https://www.youtube.com/iframe_api" async></script>
-    <script src="https://w.soundcloud.com/player/api.js" async></script>
-    <script src="./scripts/cookie-manager.js" async></script>
-    <script src="./scripts/game-loader.js" async></script>
-    <script src="./scripts/game-manager.js" async></script>
-    <script src="./scripts/game-settings.js" async></script>
-    <script src="./scripts/players.js" async></script>
-    <script src="./scripts/works-manager.js" async></script>
-    <noscript>Please enable or use a browser that support JavaScript in order to play the game !</noscript>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="https://w.soundcloud.com/player/api.js"></script>
+    <script src="./scripts/cookie-manager.js"></script>
+    <script src="./scripts/events-manager.js"></script>
+    <script src="./scripts/game-loader.js"></script>
+    <script src="./scripts/game-manager.js"></script>
+    <script src="./scripts/game-settings.js"></script>
+    <script src="./scripts/players.js"></script>
+    <script src="./scripts/works-manager.js"></script>
+    <noscript>Please enable or use a browser that supports JavaScript in order to play the game!</noscript>
 </body>
 
 </html>
