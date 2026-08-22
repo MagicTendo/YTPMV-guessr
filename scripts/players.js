@@ -4,11 +4,14 @@ const currentTime = document.getElementsByClassName("current-time")[0];
 const totalDuration = document.getElementsByClassName("total-duration")[0];
 const nicovideoPlayerIframe = document.getElementById("nicovideo-player");
 const soundCloudPlayerIframe = document.getElementById("soundcloud-player");
+const seekJumpTime = 5;
+const updateTimestampsInterval = 1_000;
 
 let youtubePlayerIframe = document.getElementById("youtube-player");
 let isPlaying = false;
 let isNicoVideoPlaying = false;
 let hasYTPMVLoaded = false;
+let canUseSeekBar = false;
 let loadingTimeout;
 let timeUpdateInterval;
 let loadingInterval;
@@ -17,24 +20,37 @@ let youtubePlayer;
 let soundCloudPlayer;
 let currentWorkID;
 
-async function changeSeekTime(newTime) {
-    if (playerType === "youtube" && youtubePlayerIframe.src !== "") {
-        await youtubePlayer.seekTo(newTime, true);
-    } else if (playerType === "nicovideo" && nicovideoPlayerIframe.src !== "") {
-        await nicovideoPlayerIframe.contentWindow.postMessage({
-            sourceConnectorType: 1,
-            playerId: "1",
-            eventName: "seek",
-            data: {
-                time: newTime * 1_000
-            }
-        }, "https://embed.nicovideo.jp");
-    } else if (playerType === "soundcloud" && soundCloudPlayerIframe.src !== "") {
-        await soundCloudPlayer.seekTo(newTime * 1_000);
-    }
+async function backwardSeekTime() {
+    await changeSeekTime(Math.max(seekBar.value - seekJumpTime, 0));
+}
 
-    updateTimestamps();
-    updatePlayButton();
+async function changeSeekTime(newTime) {
+    if (!seekBar.classList.contains("disabled")) {
+        if (newTime >= seekBar.max) {
+            isPlaying = false;
+            newTime = seekBar.max;
+
+            clearInterval(timeUpdateInterval);
+        }
+
+        updateSeekBar(newTime);
+        updatePlayButton();
+
+        if (playerType === "youtube" && youtubePlayerIframe.src !== "") {
+            await youtubePlayer.seekTo(newTime, true);
+        } else if (playerType === "nicovideo" && nicovideoPlayerIframe.src !== "") {
+            await nicovideoPlayerIframe.contentWindow.postMessage({
+                sourceConnectorType: 1,
+                playerId: "1",
+                eventName: "seek",
+                data: {
+                    time: newTime * 1_000
+                }
+            }, "https://embed.nicovideo.jp");
+        } else if (playerType === "soundcloud" && soundCloudPlayerIframe.src !== "") {
+            await soundCloudPlayer.seekTo(newTime * 1_000);
+        }
+    }
 }
 
 function endPlayer() {
@@ -42,6 +58,10 @@ function endPlayer() {
 
     updateSeekBar(seekBar.max);
     updatePlayButton();
+}
+
+async function forwardSeekTime() {
+    await changeSeekTime(Math.min(seekBar.value + seekJumpTime, seekBar.max));
 }
 
 async function isYTPMVPlaying() {
@@ -58,7 +78,7 @@ async function isYTPMVPlaying() {
 }
 
 async function loadPlayer(work, workID) {
-    loadLoadingScreenComment("Loading the corresponding player and checking if the YTPMV is playable...");
+    loadLoadingScreenComment("Loading the corresponding player and checking if the work is playable...");
 
     youtubePlayerIframe.src = "";
     nicovideoPlayerIframe.src = "";
@@ -67,17 +87,6 @@ async function loadPlayer(work, workID) {
     seekBar.value = 0;
     seekBar.max = 0;
     currentWorkID = workID;
-
-    if (playerType === "youtube") {
-        const currentYouTubeIframe = youtubePlayer.getIframe();
-        const parentElement = currentYouTubeIframe.parentNode;
-        const playerClone = currentYouTubeIframe.cloneNode();
-
-        await youtubePlayer.destroy();
-        await parentElement.prepend(playerClone);
-
-        youtubePlayerIframe = playerClone;
-    }
 
     if (work["link"].includes("youtube")) {
         youtubePlayerIframe.src = `https://www.youtube-nocookie.com/embed/${work["link"].split("watch?v=")[1]}?enablejsapi=1&showinfo=0`;
@@ -92,6 +101,17 @@ async function loadPlayer(work, workID) {
 
     if (playerType === "youtube") {
         try {
+            if (typeof youtubePlayer !== "undefined") {
+                const currentYouTubeIframe = youtubePlayer?.getIframe() ?? youtubePlayerIframe;
+                const parentElement = currentYouTubeIframe.parentNode;
+                const playerClone = currentYouTubeIframe.cloneNode();
+
+                await youtubePlayer.destroy();
+                await parentElement.prepend(playerClone);
+
+                youtubePlayerIframe = playerClone;
+            }
+
             youtubePlayer = await new YT.Player("youtube-player", {
                 events: {
                     onReady: async () => {
@@ -161,20 +181,23 @@ async function playOrPauseYTPMV() {
     if (isPlaying && playerType !== "soundcloud") {
         loadingInterval = setInterval(async () => {
             if (await isYTPMVPlaying()) {
-                if (seekBar.disabled)
-                    seekBar.disabled = false;
+                if (!canUseSeekBar)
+                    canUseSeekBar = true;
+
+                seekBar.classList.remove("disabled");
 
                 playButton.innerText = "⏸️";
 
                 await startTimer();
+
                 clearInterval(loadingInterval);
             } else {
-                playButton.innerText = "⏳";
+                playButton.innerText = "⌛";
             }
         }, 500);
     } else {
-        if (seekBar.disabled && playerType === "soundcloud")
-            seekBar.disabled = false;
+        if (seekBar.classList.contains("disabled") && playerType === "soundcloud")
+            seekBar.classList.remove("disabled");
 
         updatePlayButton();
     }
@@ -185,7 +208,7 @@ async function playOrPauseYTPMV() {
         await updateTimestamps();
     }
 
-    timeUpdateInterval = setInterval(updateTimestamps, 1_000);
+    timeUpdateInterval = setInterval(updateTimestamps, updateTimestampsInterval);
 }
 
 async function loadSeekBar(total) {
@@ -193,11 +216,12 @@ async function loadSeekBar(total) {
     seekBar.max = total;
 
     if (total <= 0 || isNaN(total)) {
-        await handleBrokenLink(currentWorkID, "Invalid duration (maybe either deleted, private or age restricted).");
+        await handleBrokenLink(currentWorkID, "Invalid duration (maybe either deleted, private, or age restricted).");
     } else {
         hasYTPMVLoaded = true;
 
         clearTimeout(loadingTimeout);
+
         await playerHasLoaded();
     }
 }
@@ -212,11 +236,12 @@ async function shiftPlayerHead(amount) {
 
 async function stopYTPMV(roundEnded = false) {
     if (roundEnded)
-        seekBar.disabled = true;
+        seekBar.classList.add("disabled");
 
     isPlaying = false;
 
     clearInterval(timeUpdateInterval);
+
     updateSeekBar(0);
     updatePlayButton();
 
@@ -253,34 +278,16 @@ function updateSeekBar(current) {
 }
 
 async function updateTimestamps() {
-    if (seekBar.value === seekBar.max) {
-        isPlaying = false;
-
-        clearInterval(timeUpdateInterval);
-    } else {
-        if (playerType === "youtube") {
-            updateSeekBar(await youtubePlayer.getCurrentTime());
-        } else if (playerType === "soundcloud") {
-            await soundCloudPlayer.getPosition(async (duration) => {
-                updateSeekBar(duration / 1_000);
-            });
-        }
+    if (playerType === "youtube") {
+        updateSeekBar(await youtubePlayer.getCurrentTime());
+    } else if (playerType === "soundcloud") {
+        await soundCloudPlayer.getPosition(async (duration) => {
+            updateSeekBar(duration / 1_000);
+        });
     }
 }
 
-playButton.addEventListener("click", async () => {
-    await playOrPauseYTPMV();
-});
-
-document.getElementsByClassName("stop-button")[0].addEventListener("click", async () => {
-    await stopYTPMV();
-});
-
-["input", "change"].forEach(event => seekBar.addEventListener(event, async (event) => {
-    changeSeekTime(event.target.valueAsNumber);
-}));
-
-window.addEventListener("message", async (event) => {
+async function handleNicoNicoDougaPlayer(event) {
     if (event.origin === "https://embed.nicovideo.jp" && playerType === "nicovideo") {
         if (event["data"]["eventName"] === "loadComplete") {
             await loadSeekBar(event["data"]["data"]["videoInfo"]["lengthInSeconds"]);
@@ -295,4 +302,11 @@ window.addEventListener("message", async (event) => {
             isNicoVideoPlaying = true;
         }
     }
-});
+}
+
+playButton.addEventListener("click", playOrPauseYTPMV);
+seekBar.addEventListener("click", async () => { if (canUseSeekBar) await changeSeekTime(event.offsetX * seekBar.max / seekBar.offsetWidth); });
+document.getElementsByClassName("stop-button")[0].addEventListener("click", stopYTPMV);
+document.getElementsByClassName("forward-button")[0].addEventListener("click", () => { forwardSeekTime(); });
+document.getElementsByClassName("backward-button")[0].addEventListener("click", () => { backwardSeekTime(); });
+window.addEventListener("message", handleNicoNicoDougaPlayer);

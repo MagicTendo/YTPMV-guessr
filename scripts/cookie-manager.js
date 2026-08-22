@@ -1,3 +1,11 @@
+function clearAllCookies() {
+    document.cookie.split(";").forEach(cookie => {
+        cookieStore.delete(cookie.split("=")[0]);
+    });
+
+    alert("All cookies has been cleared!");
+}
+
 function createCookie(cookie, data) {
     const date = new Date();
 

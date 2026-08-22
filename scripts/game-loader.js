@@ -3,30 +3,12 @@ const loadingEllipsis = document.getElementsByClassName("loading-ellipsis")[0];
 const loadingComment = document.getElementsByClassName("loading-comment")[0];
 const htmlTag = document.getElementsByTagName("html")[0];
 
-var isLoading = false;
-var loadingMessageInterval;
+let isLoading = false;
+let loadingMessageInterval;
 
-async function loadBackground() {
-    loadLoadingScreenComment("Loading the background image...");
-
-    const backgrounds = ["akkariin", "billy-mays", "cat-planet", "hh-gregg", "kabikira", "kill-me-baby", "kitchen-gun", "koopa", "michael-rosen", "mrbeast", "octagon", "old-spice", "padoru", "shibamata", "tom-scott"];
-    let randomBackgroundIndex;
-    let randomBackground;
-
-    do {
-        randomBackgroundIndex = Math.floor(Math.random() * backgrounds.length);
-        randomBackground = backgrounds[randomBackgroundIndex];
-    } while (htmlTag.style.backgroundImage?.includes(randomBackground));
-
-    htmlTag.style.backgroundImage = `url("./assets/images/backgrounds/${randomBackground}.png")`;
-}
-
-async function loadData(isSafeModeActivated, answerTypes, answer) {
-    answerTypes["creators"][0].placeholder = "Creator(s)";
-    answerTypes["sources"][0].placeholder = "Source(s)";
-    answerTypes["songs"][0].placeholder = "Song(s)";
-
+async function loadData(answerTypes, answer) {
     Object.keys(answerTypes).forEach(async answerType => {
+        answerTypes[answerType][0].placeholder = `${(String(answerType).charAt(0).toUpperCase() + String(answerType).slice(1)).slice(0, -1)}(s)`;
         answerTypes[answerType][0].disabled = false;
         answerTypes[answerType][0].value = "";
         answerTypes[answerType][1].innerText = "";
@@ -35,7 +17,7 @@ async function loadData(isSafeModeActivated, answerTypes, answer) {
         await fetch(`./data/${answerType}.json`)
             .then(response => response.json())
             .then(data => {
-                const answerOptions = answerType === "creators" ? data : isSafeModeActivated ? data["safe"] : data["safe"].concat(data["unsafe"]);
+                const answerOptions = answerType === "creators" ? data : getUserSetting("safe-mode") ? data["safe"] : data["safe"].concat(data["unsafe"]);
 
                 answerOptions.forEach(answerOption => {
                     const option = document.createElement("option");
@@ -56,6 +38,46 @@ async function loadData(isSafeModeActivated, answerTypes, answer) {
     });
 }
 
+async function loadInterface() {
+    const lastSelectedDifficulty = getCookie("difficulty") ?? "easy";
+    const lastSelectedDifficultyElement = document.getElementById(lastSelectedDifficulty);
+
+    lastSelectedDifficultyElement.checked = true;
+    defaultValues["difficulty"] = getCookie("difficulty") ?? "easy";
+
+    Object.values(document.getElementsByClassName("option")).forEach(option => {
+        const optionName = option.classList[0];
+        const defaultValue = getCookie(optionName) ?? option.dataset.default;
+
+        if (option.type !== "radio")
+            option.checked = defaultValue === "true";
+
+        option.addEventListener("input", () => {
+            if (option.type === "checkbox")
+                createCookie(optionName, option.checked);
+            else
+                createCookie("difficulty", option.id);
+        });
+
+        defaultValues[optionName] = defaultValue;
+    });
+
+    Object.values(document.getElementsByClassName("input")).forEach(input => {
+        const inputName = input.classList[0];
+
+        input.value = getCookie(inputName) ?? input.dataset.default;
+
+        input.addEventListener("change", () => { createCookie(inputName, input.value); });
+
+        defaultValues[inputName] = getCookie(inputName) ?? input.value;
+    });
+
+    clearCookiesButton.addEventListener("click", clearSettings);
+
+    initialiseModals();
+    updateHighScore();
+}
+
 async function loadLoadingScreen() {
     loadLoadingScreenComment("Loading the loading screen...");
     resetTimer();
@@ -71,6 +93,7 @@ async function loadLoadingScreen() {
             loadingEllipsis.innerText += ".";
     }, 300);
 
+    gameScreen.classList.remove("hide");
     loadingScreen.classList.remove("hide");
 }
 
@@ -78,21 +101,22 @@ function loadLoadingScreenComment(comment) {
     loadingComment.innerText = comment;
 }
 
-async function loadRound(workID, isSafeModeActivated, answerTypes) {
+async function loadRound(workID, answerTypes) {
     const answer = await loadWorkAndPlayer(workID);
 
-    await loadData(isSafeModeActivated, answerTypes, answer);
+    await loadData(answerTypes, answer);
 
     return answer;
 }
 
 async function loadWorkAndPlayer(workID) {
-    loadLoadingScreenComment("Loading the YTPMV...");
+    loadLoadingScreenComment("Loading the work...");
 
     let creators;
     let sources;
     let songs;
     let ytpmvName;
+    let ytpmvPlateform;
     let ytpmvThumbnail;
 
     await fetch(`./data/${Math.floor(workID / 1_000)}/${workID}.json`)
@@ -102,6 +126,7 @@ async function loadWorkAndPlayer(workID) {
             sources = work["sources"];
             songs = work["songs"];
             ytpmvName = work["name"];
+            ytpmvPlateform = work["link"].includes("youtube") ? "YouTube" : work["link"].includes("nicovideo") ? "Niconico" : "SoundCloud";
             ytpmvThumbnail = work["thumbnail"];
 
             if (typeof ytpmvThumbnail !== "string")
@@ -110,7 +135,7 @@ async function loadWorkAndPlayer(workID) {
             await loadPlayer(work, workID);
         });
 
-    return { "creators": creators, "sources": sources, "songs": songs, "id": workID, "name": ytpmvName, "thumbnail": ytpmvThumbnail };
+    return { "creators": creators, "sources": sources, "songs": songs, "id": workID, "name": ytpmvName, "plateform": ytpmvPlateform, "thumbnail": ytpmvThumbnail };
 }
 
 async function playerHasLoaded() {
@@ -120,13 +145,16 @@ async function playerHasLoaded() {
         if (!isLoading) {
             clearInterval(loadingMessageInterval);
 
-            loadingScreen.classList.add("hide");
-
             toggleShortcuts(true);
+
+            console.log("%cYes, you can cheat very easily because I'm doing everything in frontend!", "color: red; font-size: 35px; font-weight: bold;");
+            console.log("But this wasn't your plan, right?");
+
+            seekBar.classList.add("disabled");
+            loadingScreen.classList.add("hide");
+            game.classList.remove("hide");
         }
     }, 6_500);
 }
 
-function showLoadingScreen() {
-    loadingScreen.classList.remove("hide");
-}
+window.addEventListener("load", loadInterface);

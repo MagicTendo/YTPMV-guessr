@@ -1,46 +1,34 @@
 async function handleBrokenLink(wordID, error) {
-    loadLoadingScreenComment("Error while loading the YTPMV, looking for a new one...");
+    loadLoadingScreenComment("Error while loading the work, looking for a new one...");
 
     console.log(`Problem with work ${wordID} : impossible to load the video. Reason given below.`);
     console.error(error);
 
-    await startNewRound(userSettings["safe"], true);
+    await startNewRound(getUserSetting("safe-mode"), true);
 }
 
 async function selectRandomWorks(rounds, workIDs, isSafeModeActivated, onlyOne = false) {
-    loadLoadingScreenComment("Fetching YTPMVs...");
+    loadLoadingScreenComment("Fetching works...");
 
     const selectedWorkIDs = [];
+
+    rounds = onlyOne ? 1 : +rounds;
 
     await fetch("./data/work-ids.json")
         .then(response => response.json())
         .then(works => {
-            const selectedMode = getCookie("mode") ?? "classic";
-            const everyGameModes = ["sources-only", "songs-only", "collab", "multisource"];
-            let workList;
+            const selectedDifficulty = getUserSetting("difficulty");
+            const difficulties = ["easy", "medium", "hard"];
+            const difficultyHierarchie = selectedDifficulty === "easy" ? 1 : selectedDifficulty === "medium" ? 2 : 3;
+            const workList = [];
+            let randomWorkID;
 
-            if (selectedMode === "classic") {
-                workList = works["safe"];
-
-                everyGameModes.forEach(gameMode => {
-                    workList.concat(works[gameMode]["safe"]);
-                });
-
-                if (!isSafeModeActivated) {
-                    workList.concat(works["unsafe"]);
-
-                    everyGameModes.forEach(gameMode => {
-                        workList.concat(works[gameMode]["unsafe"]);
-                    });
-                }
-            } else {
-                workList = works[selectedMode]["safe"];
+            for (let i = 0; i < difficultyHierarchie; i++) {
+                workList.push(...works[difficulties[i]]["safe"]);
 
                 if (!isSafeModeActivated)
-                    workList.concat(works[selectedMode]["unsafe"]);
+                    workList.push(...works[difficulties[i]]["unsafe"]);
             }
-
-            let randomWorkID = -1;
 
             for (let i = 0; i < rounds; i++) {
                 do {
