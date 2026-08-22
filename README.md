@@ -7,7 +7,7 @@
 ![JavaScript](https://img.shields.io/badge/JavaScript-bfa315.svg?logo=javascript&logoColor=ffffff)
 ![JSON](https://img.shields.io/badge/JSON-000000.svg?logo=json&logoColor=ffffff)
 
-![YTPMV guessr logo](./assets/images/ytpmv-guessr-logo.png)
+![YTPMV guessr logo](./assets/images/logos/ytpmv-guessr.png)
 
 </div>
 
