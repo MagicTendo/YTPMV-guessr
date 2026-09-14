@@ -31,5 +31,5 @@ function initialiseModals() {
 function getUserSetting(settingName) {
     const rawSetting = getCookie(settingName) ?? defaultValues[settingName];
 
-    return isNaN(rawSetting) ? rawSetting === "true" : Number(rawSetting);
+    return settingName === "difficulty" ? rawSetting : isNaN(rawSetting) ? rawSetting === "true" : Number(rawSetting);
 }

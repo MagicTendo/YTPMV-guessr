@@ -67,7 +67,7 @@ async function startNewRound(hadError = false) {
         await loadLoadingScreen();
 
         if (hadError) {
-            workIDs[currentRound - 1] = await selectRandomWorks(1, workIDs, getUserSetting("safe"), true);
+            workIDs[currentRound - 1] = await selectRandomWorks(1, workIDs, getUserSetting("safe-mode"), true);
         } else {
             currentRound++;
 
@@ -190,7 +190,7 @@ async function revealAnswer() {
 async function startNewGame() {
     scoreOverlay.innerText = "0";
     roundOverlay.innerText = "1";
-    maxRounds = getUserSetting("max-rounds");
+    maxRounds = getUserSetting("round-amount");
     maxPoints = 0;
     score = 0;
     currentRound = 1;

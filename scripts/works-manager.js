@@ -19,7 +19,7 @@ async function selectRandomWorks(rounds, workIDs, isSafeModeActivated, onlyOne =
         .then(works => {
             const selectedDifficulty = getUserSetting("difficulty");
             const difficulties = ["easy", "medium", "hard"];
-            const difficultyHierarchie = selectedDifficulty === "easy" ? 1 : selectedDifficulty === "medium" ? 2 : 3;
+            const difficultyHierarchie = selectedDifficulty === "medium" ? 2 : selectedDifficulty === "hard" ? 3 : 1;
             const workList = [];
             let randomWorkID;
 

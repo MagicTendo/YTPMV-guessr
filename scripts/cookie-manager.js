@@ -6,6 +6,12 @@ function clearAllCookies() {
     alert("All cookies has been cleared!");
 }
 
+function clearAllCookies() {
+    document.cookie.split(";").forEach(function(cookie) {
+        document.cookie = `${cookie.trim().split("=")[0]}=;expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
+    });
+}
+
 function createCookie(cookie, data) {
     const date = new Date();
 
